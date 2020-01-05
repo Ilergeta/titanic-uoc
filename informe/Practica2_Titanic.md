@@ -1848,8 +1848,8 @@ display(result)
 
 
 <div>
-<style scoped>
-<table border="1" class="dataframe">
+
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
