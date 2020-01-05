@@ -38,11 +38,24 @@ import seaborn as sns
 import os
 ```
 
-# 1. Descripció del dataset 
+# 1. Descripció del dataset
 
 El dataset seleccionat ha estat [Titanic: Machine Learning from Disaster](https://www.kaggle.com/c/titanic) que ens proporciona *kaggle* amb l'objectiu de determinar quins dels pasatgers del titanic sobreviuen a [l'accident del 15 d'abril de 1912](https://es.wikipedia.org/wiki/RMS_Titanic) en el qual van morir 1514 persones de les 2223 que viatjaven en el transatlàntic.
 
-L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, encara que sabem que hi ha un component de sort en la supervivència de les persones. Per dur a terme aquest objectiu partim de dos conjunts de dades, un que ens servirà com a entrenament, el qual compte amb 891 registres, i l'altre com test, el qual compte amb 418 registres, per validar els algoritmes de predicció fets servir.
+L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, encara que sabem que hi ha un component de sort en la supervivència de les persones. Per dur a terme aquest objectiu partim de dos conjunts de dades, un que ens servirà com a entrenament, el qual compte amb 891 registres, i l'altre com test, el qual compte amb 418 registres, per validar els algoritmes de predicció fets servir. Els atributs per cada registre són:
+
+* PassengerId
+* Survived: 1 = Si, 0 = No
+* Pclass: Classe de bitllet, 1 = Primera classe, 2 = Segona classe, 3 = Tercera clase
+* Name
+* Sex
+* Age
+* SibSp: Nombre de germans o cònjuges a bord
+* Parch: Nombre de pares o fills a bord
+* Ticket: Nombre del bitllet
+* Fare
+* Cabin
+* Embarked: Port d'embarcament, C = Cherbourg, Q = Queenstown, S = Southampton
 
 # 2. Intregració i selecció de les dades d'interès a analitzar
 
@@ -67,19 +80,7 @@ titanic_train_raw.head()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -214,19 +215,7 @@ titanic_test_raw.head()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -371,19 +360,7 @@ titanic_train.describe()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -493,19 +470,7 @@ titanic_test.describe()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -661,19 +626,7 @@ titanic_train_raw[titanic_train_raw['Embarked'].isnull()]
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -748,19 +701,7 @@ titanic_test_raw[titanic_test_raw['Fare'].isnull()]
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -980,7 +921,7 @@ print(titanic_train_final[titanic_train_final["SibSp"] == 8])
     792        793.0       0.0     3.0  11.0    8.0    2.0  69.55         1.0   
     846        847.0       0.0     3.0   8.0    8.0    2.0  69.55         0.0   
     863        864.0       0.0     3.0   9.0    8.0    2.0  69.55         1.0   
-    
+
          Sex_male  Embarked_C  Embarked_Q  Embarked_S  
     159       1.0         0.0         0.0         1.0  
     180       0.0         0.0         0.0         1.0  
@@ -1047,9 +988,9 @@ Per saber quins grups de dades es seleccionaran, es realitza una anàlisi explor
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 1], 
+plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 1],
              bins=60, color="darkturquoise", label="Survived", alpha=0.5)
-plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 0], 
+plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 0],
              bins=60, color="lightcoral", label="Died", alpha=0.5)
 plt.xlabel("Age")
 plt.ylabel("Frequency")
@@ -1070,9 +1011,9 @@ S'observa que les dues distribucions són molt similars, és normal, ja que la m
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 1], 
+plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 1],
              bins=40, color="darkturquoise", label="Survived", alpha=0.5)
-plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 0], 
+plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 0],
              bins=40, color="lightcoral", label="Died", alpha=0.5)
 plt.xlabel("Fare")
 plt.ylabel("Frequency")
@@ -1093,13 +1034,13 @@ La tarifa segurament estarà fortament correlacionada amb la classe, ja que les 
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==1], 
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==1],
              bins=40, color="darkturquoise", label="1rst",alpha=0.5)
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==2], 
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==2],
              bins=40, color="lightcoral", label="2nd",alpha=0.5)
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==3], 
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==3],
              bins=40, color="g", label="3rd",alpha=0.5)
 
 plt.xlabel("Fare")
@@ -1255,7 +1196,7 @@ Finalment, en aquesta darrera agrupació, es rebutja la hipòtesis nul.la i, per
 **En funció de les dades i de l'objectiu de l'estudi, aplicar proves de constrast d'hipòtesis, correlacions, regressions, etc. Aplicar almenys tres mètodes d'anàlisi diferents.**
 
 En aquest apartat i segons la informació obtinguda en els anteriors apartats, es realitzaran les següents anàlisis:
-* **Proves de contrast d'hipòtesis** per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits. 
+* **Proves de contrast d'hipòtesis** per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits.
 * **Tests de models predictius** per tal de poder obtenir prediccions sobre la supervivència d'un determinat element. TODO I EXPLICAR QUINS MODELS S'APLICARAN!!
 
 #### Proves de contrast d'hipòtesis
@@ -1386,21 +1327,21 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-    
+
     ------- Matriu de confusió -------
     [[189  28]
-     [ 39 101]] 
-    
+     [ 39 101]]
+
     ------- Classification report -------
                   precision    recall  f1-score   support
-    
+
              0.0       0.83      0.87      0.85       217
              1.0       0.78      0.72      0.75       140
-    
+
        micro avg       0.81      0.81      0.81       357
        macro avg       0.81      0.80      0.80       357
     weighted avg       0.81      0.81      0.81       357
-    
+
 
 
 Per tal d'avaluar el nivell de significació dels diferents coeficients, s'implementa logístic regression mitjançant la llibreria ```statsmodels```
@@ -1420,7 +1361,7 @@ sm_model.summary()
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-    
+
 
 
     /home/josepm/anaconda3/lib/python3.7/site-packages/statsmodels/compat/pandas.py:49: FutureWarning: The Panel class is removed from pandas. Accessing it from the top-level namespace will also be removed in the next version
@@ -1455,10 +1396,10 @@ sm_model.summary()
   <th>Date:</th>          <td>Fri, 03 Jan 2020</td> <th>  Pseudo R-squ.:     </th>  <td>0.3226</td>  
 </tr>
 <tr>
-  <th>Time:</th>              <td>21:10:08</td>     <th>  Log-Likelihood:    </th> <td> -239.91</td> 
+  <th>Time:</th>              <td>21:10:08</td>     <th>  Log-Likelihood:    </th> <td> -239.91</td>
 </tr>
 <tr>
-  <th>converged:</th>           <td>True</td>       <th>  LL-Null:           </th> <td> -354.16</td> 
+  <th>converged:</th>           <td>True</td>       <th>  LL-Null:           </th> <td> -354.16</td>
 </tr>
 <tr>
   <th> </th>                      <td> </td>        <th>  LLR p-value:       </th> <td>3.419e-44</td>
@@ -1560,10 +1501,10 @@ ax[1].set_xlabel("gamma (escala logarítmica)");
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són:
     {'C': 540.1397163485832, 'gamma': 9.220965334716942e-06}
-    
+
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0974,
     el que representa que la millor puntuació és un 14.99% millor que la pitjor.
-    
+
 
 
 
@@ -1594,21 +1535,21 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-    
+
     ------- Matriu de confusió -------
     [[196  21]
-     [ 46  94]] 
-    
+     [ 46  94]]
+
     ------- Classification report -------
                   precision    recall  f1-score   support
-    
+
              0.0       0.81      0.90      0.85       217
              1.0       0.82      0.67      0.74       140
-    
+
        micro avg       0.81      0.81      0.81       357
        macro avg       0.81      0.79      0.80       357
     weighted avg       0.81      0.81      0.81       357
-    
+
 
 
 ##### KNN
@@ -1658,8 +1599,8 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 ```
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són: {'n_neighbors': 5, 'weights': 'uniform'}
-    
-    
+
+
     La taula de puntuació en funció del valor k (columnes) i tipologia de pesos elegits (files) és:
 
 
@@ -1669,19 +1610,7 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1732,7 +1661,7 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0337,
     el que representa que la millor puntuació és un 5.07% millor que la pitjor.
-    
+
 
 
 
@@ -1763,21 +1692,21 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.7395
-    
+
     ------- Matriu de confusió -------
     [[186  31]
-     [ 62  78]] 
-    
+     [ 62  78]]
+
     ------- Classification report -------
                   precision    recall  f1-score   support
-    
+
              0.0       0.75      0.86      0.80       217
              1.0       0.72      0.56      0.63       140
-    
+
        micro avg       0.74      0.74      0.74       357
        macro avg       0.73      0.71      0.71       357
     weighted avg       0.74      0.74      0.73       357
-    
+
 
 
 ##### XGBoost
@@ -1792,7 +1721,7 @@ from scipy.stats import randint
 # Crea el diccionari amb els paramatres a emprar segons es requereix
 param_distributions = {"colsample_bytree": uniform(0.7, 0.3),
     "gamma": uniform(0, 0.5),
-    "learning_rate": uniform(0.03, 0.3), # default 0.1 
+    "learning_rate": uniform(0.03, 0.3), # default 0.1
     "max_depth": randint(2, 6), # default 3
     "n_estimators": randint(100, 150), # default 100
     "subsample": uniform(0.6, 0.4)}
@@ -1853,10 +1782,10 @@ ax[5].set_xlabel("colsample_bytree");
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són:
     {'colsample_bytree': 0.7958491252409777, 'gamma': 0.3747139534631242, 'learning_rate': 0.04718573255762214, 'max_depth': 3, 'n_estimators': 132, 'subsample': 0.6054013160093471}
-    
+
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0393,
     el que representa que la millor puntuació és un 5.10% millor que la pitjor.
-    
+
 
 
 
@@ -1887,27 +1816,27 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8263
-    
+
     ------- Matriu de confusió -------
     [[204  13]
-     [ 49  91]] 
-    
+     [ 49  91]]
+
     ------- Classification report -------
                   precision    recall  f1-score   support
-    
+
              0.0       0.81      0.94      0.87       217
              1.0       0.88      0.65      0.75       140
-    
+
        micro avg       0.83      0.83      0.83       357
        macro avg       0.84      0.80      0.81       357
     weighted avg       0.83      0.83      0.82       357
-    
+
 
 
 
 ```python
-# Mostra la precisió dels diferents models predictius 
-result = pd.DataFrame([acc_logit, acc_svc, acc_knn, acc_xgboost], 
+# Mostra la precisió dels diferents models predictius
+result = pd.DataFrame([acc_logit, acc_svc, acc_knn, acc_xgboost],
              index=['Logistic Regression', 'Suport Vector Classifier', 'KNN', 'XGBoost'],
              columns=['accuracy']
             )
@@ -1919,19 +1848,7 @@ display(result)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1979,19 +1896,7 @@ titanic_test_final.head()
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2113,7 +2018,7 @@ titanic_test_final['Survived_pred'] = y_test_pred
 result = titanic_test_final[['PassengerId', 'Survived_pred']].astype('int64')
 
 # S'exporta el dataframe al fitxer de submissio
-result.to_csv(path_or_buf=os.getcwd()+'/data/out/test_submission.csv', 
+result.to_csv(path_or_buf=os.getcwd()+'/data/out/test_submission.csv',
                     header=['PassengerId', 'Survived'], index=False)
 ```
 
