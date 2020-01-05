@@ -1,6 +1,8 @@
 # Neteja i anàlisi del Titanic Dataset
 
-# Informació general
+**Autors:** Josep Mª Espasa Verdés i Andrés Laverde Marín 
+
+## Informació general
 
 Per facilitar l'enteniment i el seguiment de la pràctica l'hem realitzat en un notebook de python, d'aquesta manera podem trobar tot el codi i l'informe en un únic lloc. 
 
