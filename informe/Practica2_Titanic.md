@@ -23,9 +23,18 @@ Aquesta pràctica es basarà en el tractament del dataset [Titanic: Machine Lear
   <li>Descripció del dataset</li>
   <li>Integració i selecció de les dades d'interès a analitzar</li>
   <li>Neteja de les dades</li>
+    <ul>
+      <li>Gestió de zeros i elements buits</li>
+      <li>Analisí de valors extrems</li>
+    </ul>   
   <li>Anàlisi de les dades</li>
+    <ul>
+      <li>Selecció dels grups de dades a analitzar/comparar</li>
+      <li>Comprovació de la normalitat i homogeneïtat de la variància</li>
+      <li>Aplicació de proves estadistiques per comparar els grups de dades</li>
+    </ul>
   <li>Representació dels resultats</li>
-  <li>Resolució del problema</li>
+  <li>Resolució del problema. Conclusions</li>
 </ol>
 
 
@@ -932,7 +941,7 @@ print(titanic_train_final[titanic_train_final["SibSp"] == 8])
     863       0.0         0.0         0.0         1.0  
 
 
-S'observa que les edats predites i el valor 8 en *SibSp* tenen sentit, ja que hi ha un parell de bessons de 9 anys, que, per tant no són dades incoherents, en altres paraules, encara que tinguin un valor extrany o poc comú no són valors incoherents i per tant s'eliminaran ni tractaran d'una manera diferent.
+S'observa que les edats predites i el valor 8 en *SibSp* tenen sentit, ja que hi han trigèmins de 9 anys, són valors possibles i per tant no són dades incoherents, en altres paraules, encara que tinguin un valor extrany o poc comú no són valors incoherents i per tant no s'eliminaran ni tractaran d'una manera diferent.
 
 * La variable *Parch* fa referencia al nombre de pares o fills a bord del titanic, també conté valors extrems que s'estudien a continuació:
 
@@ -974,11 +983,11 @@ ax = sns.boxplot(data=titanic_test_final[numeric_cols])
 ![png](output_52_0.png)
 
 
-S'observa una situació molt similar que en el dataset de train, per tant, no tornarem a fer el mateix raonament que ja hem fet i el que farem serà aplicar directament el canvi aplicat al dataset de train:
+S'observa una situació molt similar que en el dataset de train, per tant, no tornarem a fer el mateix raonament, sinó que aplicarem les mateixes hipòtesis en aquest conjunt de dades.
 
 # 4 i 5. Anàlisi de les dades i representació gràfica dels resultats
 
-### 4.1 Selecció dels grups de dades que es volen analitzar/comparar (planificació de les anàlisis a aplicar).
+### 4.1 Selecció dels grups de dades a analitzar/comparar (planificació de les anàlisis a aplicar).
 
 Per saber quins grups de dades es seleccionaran, es realitza una anàlisi exploratoria visual de les diferents dades, per veure quina informació es disposa i quina selecció de grups es considera més convenient per dur a terme l'analisi.
 
@@ -1003,7 +1012,7 @@ plt.title("Histogram Plot of Age for Surviving and Decease Population");
 ![png](output_58_0.png)
 
 
-S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 16), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides.
+S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 16), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides. Per tant aquesta serà una variable a tenir en compte a l'hora de fer la predicció.
 
 #### Exploració de la variable Fare:
 
@@ -1193,11 +1202,10 @@ levene(PC1_sur, PC2_sur, PC3_sur)
 Finalment, en aquesta darrera agrupació, es rebutja la hipòtesis nul.la i, per tant, es pot afirmar que **les variancies són significativament diferents en l'agrupació per classes**.
 
 ### 4.3 Aplicació de proves estadístiques per comparar els grups de dades.
-**En funció de les dades i de l'objectiu de l'estudi, aplicar proves de constrast d'hipòtesis, correlacions, regressions, etc. Aplicar almenys tres mètodes d'anàlisi diferents.**
 
 En aquest apartat i segons la informació obtinguda en els anteriors apartats, es realitzaran les següents anàlisis:
 * **Proves de contrast d'hipòtesis** per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits.
-* **Tests de models predictius** per tal de poder obtenir prediccions sobre la supervivència d'un determinat element. TODO I EXPLICAR QUINS MODELS S'APLICARAN!!
+* **Tests de models predictius** per tal de poder obtenir prediccions sobre la supervivència d'un determinat element.
 
 #### Proves de contrast d'hipòtesis
 
@@ -1270,7 +1278,7 @@ Com a conclusió final d'aquest apartat, indicar que els diferents contrasts d'h
 
 #### Tests de models predictius
 
-Per dur a terme la predicció d'aquest projecte s'estudiaran 3 models diferents **(Si puc implementaré un model de tipus Stacking o Cascading per la predicció)**. Concretament s'entrenaran els models de [regressió lògistica](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html), [vectors de suport](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) i [veïns més propers](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html).
+Per dur a terme la predicció d'aquest projecte s'estudiaran 3 models diferents. Concretament s'entrenaran els models de [regressió lògistica](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html), [vectors de suport](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html), [veïns més propers](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html) i [XGBoost](https://en.wikipedia.org/wiki/XGBoost)
 
 Per tal de poder avaluar de manera correcta el millor model de predicció, es dividirà el conjunt de dades d'entrenament en dos conjunts, un d'entrenament pròpiament i un altre de validació que serà el que permetrà elegir el millor model predictiu que, posteriorment, serà l'emprat per realitzar la predicció en el conjunt de dades de test (que ja ha vingut donat de manera segregada). Així doncs, es disposaran de tres conjunts de dades independents: entrenament (train), validació (validation) i test.
 
@@ -1881,6 +1889,8 @@ display(result)
 </table>
 </div>
 
+
+Veiem doncs que després d'aplicar 4 mètodes diferents trobant els paràmetres òptims en cada cas, el model que millor resultats dona per la predicció de l'atribut survive és XGBoost.
 
 # 6. Resolució del problema. Conclusions
 
