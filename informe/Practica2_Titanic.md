@@ -20,7 +20,7 @@ Aquesta pràctica es basarà en el tractament del dataset [Titanic: Machine Lear
 ### Índex
 
 <ol start="1">
-  <li>Descripció del dataset (Jo faria una petita introducció aqui, si vols la podem desenvolupar en detall al document)</li>
+  <li>Descripció del dataset</li>
   <li>Integració i selecció de les dades d'interès a analitzar</li>
   <li>Neteja de les dades</li>
   <li>Anàlisi de les dades</li>
@@ -344,9 +344,9 @@ titanic_test = titanic_test_raw.drop(columns=['Name', 'Ticket', 'Cabin'])
 
 # 3. Neteja de les dades
 
-### 3.1 Les dades contenen zeros o elements buits? Com gestionaries aquests casos?
+### 3.1 Gestió d'elements buits i zeros.
 
-### Anàlisi zeros
+#### Anàlisi zeros
 
 Per cercar els atributs que contenen zeros, s'utilitza el mètode ```describe``` de pandas que mostra un resum estadístic de les variables quantitatives, així, entre les dades mostrades, hi ha els valors mínims que, en cas de contenir zeros, seran els valors mínims.
 
@@ -1611,7 +1611,7 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -1897,7 +1897,7 @@ titanic_test_final.head()
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
