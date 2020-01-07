@@ -35,6 +35,7 @@ Aquesta pràctica es basarà en el tractament del dataset [Titanic: Machine Lear
     </ul>
   <li>Representació dels resultats</li>
   <li>Resolució del problema. Conclusions</li>
+  <li>Taula de contribucions</li>
 </ol>
 
 
@@ -90,7 +91,7 @@ titanic_train_raw.head()
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -225,7 +226,7 @@ titanic_test_raw.head()
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -370,7 +371,7 @@ titanic_train.describe()
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -480,7 +481,7 @@ titanic_test.describe()
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -636,7 +637,7 @@ titanic_train_raw[titanic_train_raw['Embarked'].isnull()]
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -711,7 +712,7 @@ titanic_test_raw[titanic_test_raw['Fare'].isnull()]
 
 <div>
 
-<table border="1" class="dataframe">
+<table border="0" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -2039,3 +2040,11 @@ A mode de conclusió, indicar que en aquesta pràctica, primerament, s'han anali
 Cal indicar que la precisió obtinguda en el conjunt de test és similar a l'obtinguda en el conjunt de validació, però tot i això, és relativament baixa, menor al 80%, per tal d'intentar millorar aquesta puntuació i com a indicació per a futurs treballs, després d'analitzar altres solucions penjades en la web de la competició, seria molt interessant afegir un nou camp de "Titol" de passatger on, a partir de l'string del nom, es diferenciessin els passatgers oficials (Major, Capt, Col, etc), pertanyents a la reialesa (Sir, Countess, etc), segur que aquesta variable enriquiria el dataset i permetria millorar la puntuació.
 
 Finalment, indicar que la valoració final de la pràctica ha estat molt positiva, ja que ens ha permés aplicar coneixements adquirits en altres assignatures i, com a resultat final, obtenir un resultat que ha estat "puntuat" en una competició.
+
+# 7. Taula de contribucions
+
+Contribucions | Signa
+-- | --
+Investigació prèvia |  JM.E.V. i A.L.M.
+Redacció de les respostes | JM.E.V. i A.L.M.
+Redacció de les respostes | JM.E.V. i A.L.M.

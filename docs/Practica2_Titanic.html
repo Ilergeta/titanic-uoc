@@ -13017,45 +13017,6 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
-<style type="text/css">
-    
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-
-    </style>
 
 
 <style type="text/css">
@@ -13128,12 +13089,22 @@ div#notebook {
 </div>
 <div style="width:100%;">&nbsp;</div><h1 id="Pr&#224;ctica-2:-Neteja-i-an&#224;lisi-de-les-dades">Pr&#224;ctica 2: Neteja i an&#224;lisi de les dades<a class="anchor-link" href="#Pr&#224;ctica-2:-Neteja-i-an&#224;lisi-de-les-dades">&#182;</a></h1><h3 id="Autors:-Andr&#233;s-Laverde-Mar&#237;n-i-Josep-M&#170;-Espasa-Verd&#233;s"><strong>Autors:</strong> Andr&#233;s Laverde Mar&#237;n i Josep M&#170; Espasa Verd&#233;s<a class="anchor-link" href="#Autors:-Andr&#233;s-Laverde-Mar&#237;n-i-Josep-M&#170;-Espasa-Verd&#233;s">&#182;</a></h3><p>Aquesta pràctica es basarà en el tractament del dataset <a href="https://www.kaggle.com/c/titanic">Titanic: Machine Learning from Disaster</a>.</p>
 <h3 id="&#205;ndex">&#205;ndex<a class="anchor-link" href="#&#205;ndex">&#182;</a></h3><ol start="1">
-  <li>Descripció del dataset (Jo faria una petita introducció aqui, si vols la podem desenvolupar en detall al document)</li>
+  <li>Descripció del dataset</li>
   <li>Integració i selecció de les dades d'interès a analitzar</li>
   <li>Neteja de les dades</li>
+    <ul>
+      <li>Gestió de zeros i elements buits</li>
+      <li>Analisí de valors extrems</li> 
+    </ul>   
   <li>Anàlisi de les dades</li>
+    <ul>
+      <li>Selecció dels grups de dades a analitzar/comparar</li>
+      <li>Comprovació de la normalitat i homogeneïtat de la variància</li>
+      <li>Aplicació de proves estadistiques per comparar els grups de dades</li>
+    </ul>
   <li>Representació dels resultats</li>
-  <li>Resolució del problema</li>
+  <li>Resolució del problema. Conclusions</li>
+  <li>Taula de contribucions</li>
 </ol>
 </div>
 </div>
@@ -13167,7 +13138,21 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>El dataset seleccionat ha estat <a href="https://www.kaggle.com/c/titanic">Titanic: Machine Learning from Disaster</a> que ens proporciona <em>kaggle</em> amb l'objectiu de determinar quins dels pasatgers del titanic sobreviuen a <a href="https://es.wikipedia.org/wiki/RMS_Titanic">l'accident del 15 d'abril de 1912</a> en el qual van morir 1514 persones de les 2223 que viatjaven en el transatlàntic.</p>
-<p>L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, encara que sabem que hi ha un component de sort en la supervivència de les persones. Per dur a terme aquest objectiu partim de dos conjunts de dades, un que ens servirà com a entrenament, el qual compte amb 891 registres, i l'altre com test, el qual compte amb 418 registres, per validar els algoritmes de predicció fets servir.</p>
+<p>L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, encara que sabem que hi ha un component de sort en la supervivència de les persones. Per dur a terme aquest objectiu partim de dos conjunts de dades, un que ens servirà com a entrenament, el qual compte amb 891 registres, i l'altre com test, el qual compte amb 418 registres, per validar els algoritmes de predicció fets servir. Els atributs per cada registre són:</p>
+<ul>
+<li>PassengerId</li>
+<li>Survived: 1 = Si, 0 = No</li>
+<li>Pclass: Classe de bitllet, 1 = Primera classe, 2 = Segona classe, 3 = Tercera clase</li>
+<li>Name</li>
+<li>Sex</li>
+<li>Age</li>
+<li>SibSp: Nombre de germans o cònjuges a bord</li>
+<li>Parch: Nombre de pares o fills a bord</li>
+<li>Ticket: Nombre del bitllet</li>
+<li>Fare</li>
+<li>Cabin</li>
+<li>Embarked: Port d'embarcament, C = Cherbourg, Q = Queenstown, S = Southampton</li>
+</ul>
 
 </div>
 </div>
@@ -13612,14 +13597,14 @@ dtype: object</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.1-Les-dades-contenen-zeros-o-elements-buits?-Com-gestionaries-aquests-casos?">3.1 Les dades contenen zeros o elements buits? Com gestionaries aquests casos?<a class="anchor-link" href="#3.1-Les-dades-contenen-zeros-o-elements-buits?-Com-gestionaries-aquests-casos?">&#182;</a></h3>
+<h3 id="3.1-Gesti&#243;-d'elements-buits-i-zeros.">3.1 Gesti&#243; d'elements buits i zeros.<a class="anchor-link" href="#3.1-Gesti&#243;-d'elements-buits-i-zeros.">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="An&#224;lisi-zeros">An&#224;lisi zeros<a class="anchor-link" href="#An&#224;lisi-zeros">&#182;</a></h3>
+<h4 id="An&#224;lisi-zeros">An&#224;lisi zeros<a class="anchor-link" href="#An&#224;lisi-zeros">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -14713,7 +14698,7 @@ Iteration: 5
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>S'observa que les edats predites i el valor 8 en <em>SibSp</em> tenen sentit, ja que hi ha un parell de bessons de 9 anys, que, per tant no són dades incoherents, en altres paraules, encara que tinguin un valor extrany o poc comú no són valors incoherents i per tant s'eliminaran ni tractaran d'una manera diferent.</p>
+<p>S'observa que les edats predites i el valor 8 en <em>SibSp</em> tenen sentit, ja que hi han trigèmins de 9 anys, són valors possibles i per tant no són dades incoherents, en altres paraules, encara que tinguin un valor extrany o poc comú no són valors incoherents i per tant no s'eliminaran ni tractaran d'una manera diferent.</p>
 
 </div>
 </div>
@@ -14873,7 +14858,7 @@ Iteration: 5
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>S'observa una situació molt similar que en el dataset de train, per tant, no tornarem a fer el mateix raonament que ja hem fet i el que farem serà aplicar directament el canvi aplicat al dataset de train:</p>
+<p>S'observa una situació molt similar que en el dataset de train, per tant, no tornarem a fer el mateix raonament, sinó que aplicarem les mateixes hipòtesis en aquest conjunt de dades.</p>
 
 </div>
 </div>
@@ -14888,7 +14873,7 @@ Iteration: 5
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="4.1-Selecci&#243;-dels-grups-de-dades-que-es-volen-analitzar/comparar-(planificaci&#243;-de-les-an&#224;lisis-a-aplicar).">4.1 Selecci&#243; dels grups de dades que es volen analitzar/comparar (planificaci&#243; de les an&#224;lisis a aplicar).<a class="anchor-link" href="#4.1-Selecci&#243;-dels-grups-de-dades-que-es-volen-analitzar/comparar-(planificaci&#243;-de-les-an&#224;lisis-a-aplicar).">&#182;</a></h3>
+<h3 id="4.1-Selecci&#243;-dels-grups-de-dades-a-analitzar/comparar-(planificaci&#243;-de-les-an&#224;lisis-a-aplicar).">4.1 Selecci&#243; dels grups de dades a analitzar/comparar (planificaci&#243; de les an&#224;lisis a aplicar).<a class="anchor-link" href="#4.1-Selecci&#243;-dels-grups-de-dades-a-analitzar/comparar-(planificaci&#243;-de-les-an&#224;lisis-a-aplicar).">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -14955,7 +14940,7 @@ Iteration: 5
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 16), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides.</p>
+<p>S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 16), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides. Per tant aquesta serà una variable a tenir en compte a l'hora de fer la predicció.</p>
 
 </div>
 </div>
@@ -15445,8 +15430,7 @@ L&#39;agrupació de 1a classe té 216 elements vs 2a classe que té 184 elements
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="4.3-Aplicaci&#243;-de-proves-estad&#237;stiques-per-comparar-els-grups-de-dades.">4.3 Aplicaci&#243; de proves estad&#237;stiques per comparar els grups de dades.<a class="anchor-link" href="#4.3-Aplicaci&#243;-de-proves-estad&#237;stiques-per-comparar-els-grups-de-dades.">&#182;</a></h3><p><strong>En funció de les dades i de l'objectiu de l'estudi, aplicar proves de constrast d'hipòtesis, correlacions, regressions, etc. Aplicar almenys tres mètodes d'anàlisi diferents.</strong></p>
-
+<h3 id="4.3-Aplicaci&#243;-de-proves-estad&#237;stiques-per-comparar-els-grups-de-dades.">4.3 Aplicaci&#243; de proves estad&#237;stiques per comparar els grups de dades.<a class="anchor-link" href="#4.3-Aplicaci&#243;-de-proves-estad&#237;stiques-per-comparar-els-grups-de-dades.">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -15456,7 +15440,7 @@ L&#39;agrupació de 1a classe té 216 elements vs 2a classe que té 184 elements
 <p>En aquest apartat i segons la informació obtinguda en els anteriors apartats, es realitzaran les següents anàlisis:</p>
 <ul>
 <li><strong>Proves de contrast d'hipòtesis</strong> per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits. </li>
-<li><strong>Tests de models predictius</strong> per tal de poder obtenir prediccions sobre la supervivència d'un determinat element. TODO I EXPLICAR QUINS MODELS S'APLICARAN!!</li>
+<li><strong>Tests de models predictius</strong> per tal de poder obtenir prediccions sobre la supervivència d'un determinat element. </li>
 </ul>
 
 </div>
@@ -15632,7 +15616,7 @@ Welch test for PClass2 vs PClass3: Ttest_indResult(statistic=5.529987345441652, 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Per dur a terme la predicció d'aquest projecte s'estudiaran 3 models diferents <strong>(Si puc implementaré un model de tipus Stacking o Cascading per la predicció)</strong>. Concretament s'entrenaran els models de <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">regressió lògistica</a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">vectors de suport</a> i <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">veïns més propers</a>.</p>
+<p>Per dur a terme la predicció d'aquest projecte s'estudiaran 3 models diferents. Concretament s'entrenaran els models de <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">regressió lògistica</a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">vectors de suport</a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">veïns més propers</a> i <a href="https://en.wikipedia.org/wiki/XGBoost">XGBoost</a></p>
 <p>Per tal de poder avaluar de manera correcta el millor model de predicció, es dividirà el conjunt de dades d'entrenament en dos conjunts, un d'entrenament pròpiament i un altre de validació que serà el que permetrà elegir el millor model predictiu que, posteriorment, serà l'emprat per realitzar la predicció en el conjunt de dades de test (que ja ha vingut donat de manera segregada). Així doncs, es disposaran de tres conjunts de dades independents: entrenament (train), validació (validation) i test.</p>
 <p>Cal indicar que la segregació de les dades d'entrenament es realitzarà en base als coneixements adquirits en els apartats anteriors i, per tant, es realitzarà una selecció aleatòria però estratificada segons el sexe, ja que s'ha comprovat que és l'agrupació amb diferències estadístiques més significatives. Finalment, comentar que s'ha fet una divisió de les dades amb la proporció 60-40 (entrenament-validació).</p>
 
@@ -16607,6 +16591,14 @@ weighted avg       0.83      0.83      0.82       357
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Veiem doncs que després d'aplicar 4 mètodes diferents trobant els paràmetres òptims en cada cas, el model que millor resultats dona per la predicció de l'atribut survive és XGBoost.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="6.-Resoluci&#243;-del-problema.-Conclusions">6. Resoluci&#243; del problema. Conclusions<a class="anchor-link" href="#6.-Resoluci&#243;-del-problema.-Conclusions">&#182;</a></h1>
 </div>
 </div>
@@ -16809,6 +16801,41 @@ weighted avg       0.83      0.83      0.82       357
 <p>A mode de conclusió, indicar que en aquesta pràctica, primerament, s'han analitzat les dades disponibles referent als passatgers del Titanic, netejant-les i completant-les segons s'han considerat. Posteriorment, s'ha realitzat una anàlisi descriptiva de les dades, així com diferents proves estadístiques per tal d'analitzar el comportament diferenciat d'agrupacions de dades que s'han determinat després de l'observació de la distribució mostral de determinades variables, determinant-se diferències estadísticament significatives entre les diferents agrupacions estudiades. Finalment, s'ha dividit el conjunt de dades d'entrenament amb dos grups estratificats segons sexe, ja que era l'agrupació que mostrava significativament més diferències, un d'ell s'ha tractat pròpiament com el conjunt d'entrenament emprant-lo per entrenar els diferents models considerats i, l'altre, s'ha considerat com un conjunt de validació, per tal d'avaluar la precisió de cada model estudiat. En aquest sentit, s'han implementat quatre models predictius: regressió logística, vectors de suport, knn i XGBoost, obtenint la millor precisió amb el model XGBoost, que és el que s'ha emprat per obtenir la predicció en el conjunt de dades de test i que ha estat la que s'ha penjat en la competició de kaggle.</p>
 <p>Cal indicar que la precisió obtinguda en el conjunt de test és similar a l'obtinguda en el conjunt de validació, però tot i això, és relativament baixa, menor al 80%, per tal d'intentar millorar aquesta puntuació i com a indicació per a futurs treballs, després d'analitzar altres solucions penjades en la web de la competició, seria molt interessant afegir un nou camp de "Titol" de passatger on, a partir de l'string del nom, es diferenciessin els passatgers oficials (Major, Capt, Col, etc), pertanyents a la reialesa (Sir, Countess, etc), segur que aquesta variable enriquiria el dataset i permetria millorar la puntuació.</p>
 <p>Finalment, indicar que la valoració final de la pràctica ha estat molt positiva, ja que ens ha permés aplicar coneixements adquirits en altres assignatures i, com a resultat final, obtenir un resultat que ha estat "puntuat" en una competició.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="7.-Taula-de-contribucions">7. Taula de contribucions<a class="anchor-link" href="#7.-Taula-de-contribucions">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+<thead><tr>
+<th>Contribucions</th>
+<th>Signa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Investigació prèvia</td>
+<td>JM.E.V. i A.L.M. </td>
+</tr>
+<tr>
+<td>Redacció de les respostes</td>
+<td>JM.E.V. i A.L.M. </td>
+</tr>
+<tr>
+<td>Redacció de les respostes</td>
+<td>JM.E.V. i A.L.M. </td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
