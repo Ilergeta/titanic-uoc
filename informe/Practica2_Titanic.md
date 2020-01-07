@@ -1,3 +1,4 @@
+
 <div style="width: 100%; clear: both;">
 <div style="float: left; width: 50%;">
 <img src="http://www.uoc.edu/portal/_resources/common/imatges/marca_UOC/UOC_Masterbrand.jpg", align="left">
@@ -19,24 +20,20 @@ Aquesta pràctica es basarà en el tractament del dataset [Titanic: Machine Lear
 
 ### Índex
 
-<ol start="1">
-  <li>Descripció del dataset</li>
-  <li>Integració i selecció de les dades d'interès a analitzar</li>
-  <li>Neteja de les dades</li>
-    <ul>
-      <li>Gestió de zeros i elements buits</li>
-      <li>Analisí de valors extrems</li>
-    </ul>   
-  <li>Anàlisi de les dades</li>
-    <ul>
-      <li>Selecció dels grups de dades a analitzar/comparar</li>
-      <li>Comprovació de la normalitat i homogeneïtat de la variància</li>
-      <li>Aplicació de proves estadistiques per comparar els grups de dades</li>
-    </ul>
-  <li>Representació dels resultats</li>
-  <li>Resolució del problema. Conclusions</li>
-  <li>Taula de contribucions</li>
-</ol>
+
+1. Descripció del dataset
+2. Integració i selecció de les dades d'interès a analitzar
+3. Neteja de les dades  
+  3.1. Gestió d'elements buits i zeros  
+  3.2. Anàlis de valors extrems 
+4. Anàlisi de les dades i representació gràfica dels resultats  
+  4.1. Selecció dels grups de dades a analitzar/comparar  
+  4.2. Comprovació de la normalitat i homogeneïtat de la variància  
+  4.3. Aplicació de proves estadistiques per comparar els grups de dades  
+5. Representació gràfica dels resultats
+6. Resolució del problema. Conclusions
+7. Taula de contribucions
+
 
 
 ```python
@@ -48,23 +45,23 @@ import seaborn as sns
 import os
 ```
 
-# 1. Descripció del dataset
+# 1. Descripció del dataset 
 
 El dataset seleccionat ha estat [Titanic: Machine Learning from Disaster](https://www.kaggle.com/c/titanic) que ens proporciona *kaggle* amb l'objectiu de determinar quins dels pasatgers del titanic sobreviuen a [l'accident del 15 d'abril de 1912](https://es.wikipedia.org/wiki/RMS_Titanic) en el qual van morir 1514 persones de les 2223 que viatjaven en el transatlàntic.
 
-L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, encara que sabem que hi ha un component de sort en la supervivència de les persones. Per dur a terme aquest objectiu partim de dos conjunts de dades, un que ens servirà com a entrenament, el qual compte amb 891 registres, i l'altre com test, el qual compte amb 418 registres, per validar els algoritmes de predicció fets servir. Els atributs per cada registre són:
+L'objectiu de la pràctica és entendre i predir quins grups de persones tenen més probabilitats de sobreviure, tot i el factor inherent d'incertesa associat a la supervivència en un esdeveniment com el de l'accident del Titànic. Per dur a terme aquest objectiu s'empraran dos conjunts de dades: un primer, anomenat d'entrenament, que conté 891 registres i serà utilitzat per entrenar els diferents models predictius i, alhora, seleccionar aquell model amb el que s'obtingui una millor precisió, i un segon conjunt de dades, anoment de test, que conté 418 registres i serà l'utilitzat per obtenir la predicció final que es penjarà com a resultat final a la pàgina de la competició associada al dataset a Kaggle. Els atributs per cada registre/passatger són:
 
-* PassengerId
+* PassengerId: Identificador del passatger
 * Survived: 1 = Si, 0 = No
 * Pclass: Classe de bitllet, 1 = Primera classe, 2 = Segona classe, 3 = Tercera clase
-* Name
-* Sex
-* Age
+* Name: Nom del passatger
+* Sex: female = dona, male = home
+* Age: Edat del passateger en anys
 * SibSp: Nombre de germans o cònjuges a bord
 * Parch: Nombre de pares o fills a bord
 * Ticket: Nombre del bitllet
-* Fare
-* Cabin
+* Fare: Preu del bitllet
+* Cabin: Codi de la cabina
 * Embarked: Port d'embarcament, C = Cherbourg, Q = Queenstown, S = Southampton
 
 # 2. Intregració i selecció de les dades d'interès a analitzar
@@ -78,7 +75,7 @@ titanic_train_raw = pd.read_csv(os.getcwd()+'/data/in/train.csv')
 titanic_test_raw = pd.read_csv(os.getcwd()+'/data/in/test.csv')
 ```
 
-A mode d'exploració inicial, es mostra les primeres files dels DataFrames i es comprova que la tipologia dels diferents atributs carregats és la correcta.
+A mode d'exploració inicial, es mostren les primeres files dels DataFrames i es comprova que la tipologia dels diferents atributs carregats és la correcta.
 
 
 ```python
@@ -90,8 +87,20 @@ titanic_train_raw.head()
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -225,8 +234,20 @@ titanic_test_raw.head()
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -354,7 +375,7 @@ titanic_test = titanic_test_raw.drop(columns=['Name', 'Ticket', 'Cabin'])
 
 # 3. Neteja de les dades
 
-### 3.1 Gestió d'elements buits i zeros.
+### 3.1 Gestió d'elements buits i zeros
 
 #### Anàlisi zeros
 
@@ -370,8 +391,20 @@ titanic_train.describe()
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -480,8 +513,20 @@ titanic_test.describe()
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -622,7 +667,7 @@ titanic_test.isnull().sum()
 
 Tal com es pot veure en la sortida de dades, existeixen valors nuls en l'atribut d'edat (*Age*) en els dos DataSets, tant el d'entrenament com el de test, i, en el cas del conjunt de dades d'entrenament, també presenta valors nuls el camp del port d'embarcament (*Embarked*), en dos instàncies, mentre en el cas del conjunt de dades de test, presenta un valor nul el camp del preu del bitllet (*Fare*).
 
-El tractament d'aquests valors nuls es realitza de manera diferencial segons l'atribut considerat, així, els nuls en els camps de port d'embarcament (*Embarked*) i preu del bitllet (*Fare*), donat que tenen una freqüència molt baixa, s'intentaran corregir manualment, gràcies a la gran quantitat d'informació disponible per la xarxa, referent al viatge del Titànic. En canvi, en el tractament dels valors nuls de l'atribut d'edat (*Age*), que presenta una freqüència important (177 i 86 instàncies en el conjunt de dades d'entrenament i de test, respectivament) no pot plantejar-se la correcció manual i, per tant, es planteja algun altre tipus de tractament que impliqui l'aplicació d'un mètode general. Així, una primera opció seria eliminar aquests registres nuls, però aquesta opció es descarta degut a la important pèrdua d'informació que representa, per tant, s'opta per emprar un mètode d'imputació de dades i, d'entre els disponibles, s'elegeix el missForest, ja que és considerat un mètode robust que, alhora, permet treballar amb dades mixtes.
+El tractament d'aquests valors nuls es realitza de manera diferent segons l'atribut considerat, així, els nuls en els camps de port d'embarcament (*Embarked*) i preu del bitllet (*Fare*), donat que tenen una freqüència molt baixa, s'intentaran corregir manualment, gràcies a la gran quantitat d'informació disponible per la xarxa, referent al viatge del Titànic. En canvi, en el tractament dels valors nuls de l'atribut d'edat (*Age*), que presenta una freqüència important (177 i 86 instàncies en el conjunt de dades d'entrenament i de test, respectivament) no pot plantejar-se la correcció manual i, per tant, es planteja algun altre tipus de tractament que impliqui l'aplicació d'un mètode general. Així, una primera opció seria eliminar aquests registres nuls, però aquesta opció es descarta degut a la important pèrdua d'informació que representa, per tant, s'opta per emprar un mètode d'imputació de dades i, d'entre els disponibles, s'elegeix el missForest, ja que és considerat un mètode robust que, alhora, permet treballar amb dades mixtes.
 
 Seguidament es realitza la imputació manual dels valors nuls dels atributs de port d'embarcament (*Embarked*) i preu del bitllet (*Fare*).
 
@@ -636,8 +681,20 @@ titanic_train_raw[titanic_train_raw['Embarked'].isnull()]
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -692,7 +749,7 @@ titanic_train_raw[titanic_train_raw['Embarked'].isnull()]
 
 
 
-Tal com es recull en l'[article referent a Mrs Martha Evelyn Stone](https://www.encyclopedia-titanica.org/titanic-survivor/martha-evelyn-stone.html) de l'enciclopèdia titànica, aquestes passatgeres van embarcar al Titànic al port de Southampot, per tant, els correspon un valor d''*S*' en el camp '*Embarked*'. A continuació es realitza aquesta imputació.
+Tal com es recull en l'[article referent a Mrs Martha Evelyn Stone](https://www.encyclopedia-titanica.org/titanic-survivor/martha-evelyn-stone.html) de l'enciclopèdia titànica, aquestes passatgeres van embarcar al Titànic al port de Southampton, per tant, els correspon un valor d''*S*' en el camp '*Embarked*'. A continuació es realitza aquesta imputació.
 
 
 ```python
@@ -711,8 +768,20 @@ titanic_test_raw[titanic_test_raw['Fare'].isnull()]
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -758,7 +827,7 @@ Tal com es recull en l'[article referent a Mr Thomas Storey](https://www.encyclo
 titanic_test.loc[titanic_test['PassengerId']==1044, ['Fare']]=0
 ```
 
-A continuació s'imputen els valors nuls d'edat emprant el mètode missForest, cal comentar que s'utilitza la implementació de la llibreria ```missingpy``` que, en cas de no estar instal.lada, es pot instal·lar mitjançant la comanda ```pip install missingpy```, per a més informació al respecte, es pot consultar la [documentació de la llibreria missingpy](https://pypi.org/project/missingpy/). D'altra banda, també és important indicar que les variables categòriques s'han recodificat com vectors de tipus one-hot, per tal de poder ser interpretades correctament.
+A continuació s'imputen els valors nuls d'edat emprant el mètode missForest, cal comentar que s'utilitza la implementació de la llibreria ```missingpy``` que, en cas de no estar instal.lada, es pot instal·lar mitjançant la comanda ```pip install missingpy```, per a més informació al respecte, es pot consultar la [documentació de la llibreria missingpy](https://pypi.org/project/missingpy/). D'altra banda, també és important indicar que les variables categòriques 'Sex' i 'Embarked' s'han recodificat com vectors de tipus one-hot, per tal de poder ser interpretades correctament.
 
 
 ```python
@@ -854,7 +923,7 @@ titanic_test_final = pd.DataFrame(X_imputed_test, columns=titanic_test.columns.t
       (Ximp[:, self.cat_vars_] != Ximp_old[:, self.cat_vars_])) / n_catmissing
 
 
-Abans de continuar, hem de notar que totes les edats amb valors més grans o iguals a 1 no poden ser valors decimals, pel contrari totes les edats menors d'1 indiquen els mesos de vida, per tant s'arrodoneixen tots els valors obtinguts a la predicció.
+Abans de continuar, cal indicar que totes les edats amb valors més grans o iguals a 1 no poden ser valors decimals, a excepció de totes les edats menors d'1, ja que indiquen els mesos de vida. Seguint aquest criteri, s'arrodoneixen tots els valors d'edat obtinguts a la predicció.
 
 
 ```python
@@ -882,11 +951,11 @@ for i in titanic_test_final["Age"]:
 titanic_test_final["Age"] = r
 ```
 
-### 3.2 Anàlisi valors extrems
+### 3.2 Anàlisi de valors extrems
 
 **Conjunt d'entrenament**
 
-Per trobar i facilitar l'enteniment dels valors extrems de les variables numèriques es realitza un gràfic boxplot  que ens permeti identificar ràpidament si tenim valors extrems a les nostres dades. Considerant valors extrems aquells valors que es trobin allunyats 3 desviacions estàndard respecte de la mitjana del conjunt.
+Per trobar i facilitar la comprensió dels valors extrems de les variables numèriques es realitza un gràfic boxplot  que ens permeti identificar ràpidament si tenim valors extrems a les nostres dades. Considerant valors extrems aquells valors que es trobin allunyats 3 desviacions estàndard respecte de la mitjana del conjunt.
 
 
 ```python
@@ -904,7 +973,7 @@ ax = sns.boxplot(data=titanic_train_final[numeric_cols])
 
 En aquesta primera visualització s'observa que les dades que tenen valors extrems són les variables *Age, SibSp, Parch, Fare*. Aquestes variables són les que s'analitzen a continuació, per tal de discriminar quins valors es poden considerar que estan fora de rang i quins no.
 
-* En el cas de l'edad tenim que el valor màxim és 80, per tant aquests valors són totalment normals, ja que encara que hi hagin poques persones grans és possible que un passanger del titanic tingui 80 anys, encara que no sigui molt comú és possible, per tant aquesta variable no la considerarem en el cas de valors outliers.
+* En el cas de l'edad tenim que el valor màxim és 80, per tant aquests valors són totalment normals, ja que encara que hi hagin poques persones grans és possible que un passanger del titanic tingui 80 anys, encara que no sigui molt comú, és possible, per tant no es consideren valors outliers en aquesta variable.
 
 * La variable *SibSp*, és la variable que descriu el # de germans / mullers a bord del titanic, aquesta variable s'estudia a continuació.
 
@@ -931,7 +1000,7 @@ print(titanic_train_final[titanic_train_final["SibSp"] == 8])
     792        793.0       0.0     3.0  11.0    8.0    2.0  69.55         1.0   
     846        847.0       0.0     3.0   8.0    8.0    2.0  69.55         0.0   
     863        864.0       0.0     3.0   9.0    8.0    2.0  69.55         1.0   
-
+    
          Sex_male  Embarked_C  Embarked_Q  Embarked_S  
     159       1.0         0.0         0.0         1.0  
     180       0.0         0.0         0.0         1.0  
@@ -984,13 +1053,13 @@ ax = sns.boxplot(data=titanic_test_final[numeric_cols])
 ![png](output_52_0.png)
 
 
-S'observa una situació molt similar que en el dataset de train, per tant, no tornarem a fer el mateix raonament, sinó que aplicarem les mateixes hipòtesis en aquest conjunt de dades.
+S'observa una situació molt similar que en el dataset de train i, per tant, es considera que són plenament aplicables les hipòtesis indicades anteriorment.
 
 # 4 i 5. Anàlisi de les dades i representació gràfica dels resultats
 
-### 4.1 Selecció dels grups de dades a analitzar/comparar (planificació de les anàlisis a aplicar).
+### 4.1 Selecció dels grups de dades a analitzar/comparar (planificació de les anàlisis a aplicar)
 
-Per saber quins grups de dades es seleccionaran, es realitza una anàlisi exploratoria visual de les diferents dades, per veure quina informació es disposa i quina selecció de grups es considera més convenient per dur a terme l'analisi.
+Per saber quins grups de dades es seleccionaran, es realitza una anàlisi exploratoria visual de les diferents variables, per veure quina informació es disposa i quina selecció de grups es considera més convenient per dur a terme l'analisi.
 
 #### Exploració de la variable Age:
 
@@ -998,9 +1067,9 @@ Per saber quins grups de dades es seleccionaran, es realitza una anàlisi explor
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 1],
+plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 1], 
              bins=60, color="darkturquoise", label="Survived", alpha=0.5)
-plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 0],
+plt.hist(titanic_train_final["Age"][titanic_train_final.Survived == 0], 
              bins=60, color="lightcoral", label="Died", alpha=0.5)
 plt.xlabel("Age")
 plt.ylabel("Frequency")
@@ -1013,7 +1082,7 @@ plt.title("Histogram Plot of Age for Surviving and Decease Population");
 ![png](output_58_0.png)
 
 
-S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 16), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides. Per tant aquesta serà una variable a tenir en compte a l'hora de fer la predicció.
+S'observa que les dues distribucions són molt similars, és normal, ja que la majoria de l'edat de la població es concentra entre els 15 i els 60 anys, per tant és normal que les dues distribucions siguin similars, on sí que es veu realment una diferència notable entre aquestes, és en els nens (entre els 0 i els 5 anys), és a dir una major proporció de supervivents eren nens i posa de manifest que les persones grans els hi van donar un lloc a les barques salvavides. Per tant aquesta serà una variable a tenir en compte a l'hora de fer la predicció.
 
 #### Exploració de la variable Fare:
 
@@ -1021,9 +1090,9 @@ S'observa que les dues distribucions són molt similars, és normal, ja que la m
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 1],
+plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 1], 
              bins=40, color="darkturquoise", label="Survived", alpha=0.5)
-plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 0],
+plt.hist(titanic_train_final["Fare"][titanic_train_final.Survived == 0], 
              bins=40, color="lightcoral", label="Died", alpha=0.5)
 plt.xlabel("Fare")
 plt.ylabel("Frequency")
@@ -1044,13 +1113,13 @@ La tarifa segurament estarà fortament correlacionada amb la classe, ja que les 
 ```python
 plt.figure(figsize=(15, 8))
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==1],
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==1], 
              bins=40, color="darkturquoise", label="1rst",alpha=0.5)
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==2],
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==2], 
              bins=40, color="lightcoral", label="2nd",alpha=0.5)
 
-plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==3],
+plt.hist(titanic_train_final["Fare"][titanic_train_final["Pclass"]==3], 
              bins=40, color="g", label="3rd",alpha=0.5)
 
 plt.xlabel("Fare")
@@ -1090,7 +1159,7 @@ plt.show()
 ![png](output_68_0.png)
 
 
-Veiem doncs que els passatgers que van embarcar a Cherbourg, tenen la taxa més gran de supervivència i els passatgers que van embarcar a Southhampton tenen una taxa marginalment menor de supervivència que el que van embarcar a Queenstown, segurament aquesta diferència és causada per la classe dels passatgers o amb l'ordre d'assignació de les habitacions, ja que els passatgers que embarquen abans tenen les habitacions més a prop de coberta.
+S'observa que els passatgers que van embarcar a Cherbourg, tenen un índex més gran de supervivència i els passatgers que van embarcar a Southhampton tenen un índex marginalment menor de supervivència que els que van embarcar a Queenstown, segurament aquesta diferència és causada per la classe dels passatgers o amb l'ordre d'assignació de les habitacions, ja que els passatgers que embarquen abans tenen les habitacions més a prop de coberta.
 
 També val la pena mencionar que com que la majoria de passatgers van embarcar a Cherbourg la confiança entorn de la supervivència és la més alta, en altres paraules, com la majoria de gent va embarcar a Cherbourg és lògic que la majoria de gent que sobreviu sigui d'aquest embarcament, ja que componen la majoria de passatgers.
 
@@ -1106,11 +1175,11 @@ plt.show()
 ![png](output_71_0.png)
 
 
-En aquest cas s'observa que el fet de ser dona implica, clarament, una avantatge de supervivència davant de ser home. Així doncs, la frase, en cas d'evacuació de: "dones i nens primer", sembla que es va acomplir en el cas de l'evacuació del Titànic.
+En aquest cas s'observa que el fet de ser dona implica, clarament, un avantatge de supervivència davant de ser home. Així doncs, la frase, en cas d'evacuació de: "dones i nens primer", sembla que es va acomplir en el cas de l'evacuació del Titànic.
 
 **Comentari:**
 
-En aquest cas hem vist com es comporten les diferents variables del dataset seleccionades anteriorment, de moment podem fer servir totes, tot i que també és possible només seleccionar Fare o class, en funció del mètode final que volem fer servir.
+En aquest cas s'ha vist com es comporten les diferents variables del dataset seleccionades anteriorment, de moment es poden fer servir totes, tot i que també és possible només seleccionar Fare o Class, en funció del mètode predictiu final que es vulgui emprar.
 
 ### 4.2 Comprovació de la normalitat i homogeneïtat de la variància
 
@@ -1119,7 +1188,7 @@ Després de l'anàlisi anterior s'opta per analitzar els grups de dades següent
 * 0-5 anys vs >5 anys
 * Classe 1 vs Classe 2 vs Classe 3
 
-D'aquesta manera, per cadascuna de les agrupacions anteriors, s'analitzarà si la supervivència és significativament diferents, mitjançant les proves estadístiques corresponents. Prèviament, però, cal estudiar si les agrupacions anteriors acompleixen normalitat i homoscedasticitat (igualtat de variàncies).
+D'aquesta manera, per cadascuna de les agrupacions anteriors, s'analitzarà si la supervivència és significativament diferent, mitjançant les proves estadístiques corresponents. Prèviament, però, cal estudiar si les agrupacions anteriors acompleixen normalitat i homoscedasticitat (igualtat de variàncies).
 
 A continuació es seleccionen les dades de les diferents agrupacions i es comprova la quantitat.
 
@@ -1202,11 +1271,11 @@ levene(PC1_sur, PC2_sur, PC3_sur)
 
 Finalment, en aquesta darrera agrupació, es rebutja la hipòtesis nul.la i, per tant, es pot afirmar que **les variancies són significativament diferents en l'agrupació per classes**.
 
-### 4.3 Aplicació de proves estadístiques per comparar els grups de dades.
+### 4.3 Aplicació de proves estadístiques per comparar els grups de dades
 
 En aquest apartat i segons la informació obtinguda en els anteriors apartats, es realitzaran les següents anàlisis:
-* **Proves de contrast d'hipòtesis** per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits.
-* **Tests de models predictius** per tal de poder obtenir prediccions sobre la supervivència d'un determinat element.
+* **Proves de contrast d'hipòtesis** per tal de poder afirmar si existeixen diferències estadístiques significatives entre els diferents grups de dades definits. 
+* **Tests de models predictius** per tal de poder obtenir prediccions sobre la supervivència d'un determinat element. 
 
 #### Proves de contrast d'hipòtesis
 
@@ -1245,7 +1314,7 @@ ttest_ind(chil_sur, not_chil_sur, equal_var=True)
 
 
 
-Veient el resultat obtingut, ja que el pvalue és inferior al valor de significació, es pot afirmar que **s'observen diferències significatives en la supervivència entre la població de 0 a 5 anys i els majors de 5 anys**.
+Veient el resultat obtingut, ja que el pvalue és inferior al valor de significació, es pot afirmar que **s'observen diferències significatives en la supervivència entre els passatgers de 0 a 5 anys i els majors de 5 anys**.
 
 Finalment, per analitzar l'agrupació segons la classe del passatger, donat que és una comparació entre més de dos grups, en aquest cas tres on, tot i acomplir-se la normalitat, no hi ha igualtat de variàncies, es realitza el [test de Kruskal-Wallis](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kruskal.html) que està implementat en la llibreria d'scipy de Python, igualment, es contrastaran les agrupacions dos a dos emprant el test de Welch anteriorment descrit.
 
@@ -1273,7 +1342,7 @@ print('Welch test for PClass2 vs PClass3:',ttest_ind(PC2_sur, PC3_sur, equal_var
     Welch test for PClass2 vs PClass3: Ttest_indResult(statistic=5.529987345441652, pvalue=7.161251272971601e-08)
 
 
-Dels resultats obtinguts, donat que tots els pvalues són inferiors al valor de significació, es pot afirmar que **s'observen diferències significatives en la supervivència entre la població segons la classe del bitllet**, igualment, també es comprova que **existeixen diferències significatives entre totes les classes**, segons es pot comprovar del resultat obtingut en els tests de Welch duts a terme contrastant les agrupacions dos a dos.
+Dels resultats obtinguts, donat que tots els pvalues són inferiors al valor de significació, es pot afirmar que **s'observen diferències significatives en la supervivència entre els passatgers segons la classe del bitllet**, igualment, també es comprova que **existeixen diferències significatives entre totes les classes**, segons es pot comprovar del resultat obtingut en els tests de Welch duts a terme contrastant les agrupacions dos a dos.
 
 Com a conclusió final d'aquest apartat, indicar que els diferents contrasts d'hipòtesis duts a terme confirmen el que ja s'havia observat en l'anàlisis descriptiva de les diferents variables realitzada en l'apartat 4.1.
 
@@ -1330,30 +1399,27 @@ print(confusion_matrix(y_val, y_val_pred),'\n')
 print("------- Classification report -------")
 print(classification_report(y_val, y_val_pred))
 
-#cm = confusion_matrix(y_test, y_predicted)
-#sns.heatmap(cm, annot=True, fmt="d", cbar=False, cmap=sns.color_palette("Blues"))
-#print('\n')
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-
+    
     ------- Matriu de confusió -------
     [[189  28]
-     [ 39 101]]
-
+     [ 39 101]] 
+    
     ------- Classification report -------
                   precision    recall  f1-score   support
-
+    
              0.0       0.83      0.87      0.85       217
              1.0       0.78      0.72      0.75       140
-
+    
        micro avg       0.81      0.81      0.81       357
        macro avg       0.81      0.80      0.80       357
     weighted avg       0.81      0.81      0.81       357
+    
 
 
-
-Per tal d'avaluar el nivell de significació dels diferents coeficients, s'implementa logístic regression mitjançant la llibreria ```statsmodels```
+Per tal d'avaluar el nivell de significació dels diferents coeficients, es torna a implementar la regressió logística però ara mitjançant la llibreria ```statsmodels```.
 
 
 ```python
@@ -1370,7 +1436,7 @@ sm_model.summary()
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-
+    
 
 
     /home/josepm/anaconda3/lib/python3.7/site-packages/statsmodels/compat/pandas.py:49: FutureWarning: The Panel class is removed from pandas. Accessing it from the top-level namespace will also be removed in the next version
@@ -1405,10 +1471,10 @@ sm_model.summary()
   <th>Date:</th>          <td>Fri, 03 Jan 2020</td> <th>  Pseudo R-squ.:     </th>  <td>0.3226</td>  
 </tr>
 <tr>
-  <th>Time:</th>              <td>21:10:08</td>     <th>  Log-Likelihood:    </th> <td> -239.91</td>
+  <th>Time:</th>              <td>21:10:08</td>     <th>  Log-Likelihood:    </th> <td> -239.91</td> 
 </tr>
 <tr>
-  <th>converged:</th>           <td>True</td>       <th>  LL-Null:           </th> <td> -354.16</td>
+  <th>converged:</th>           <td>True</td>       <th>  LL-Null:           </th> <td> -354.16</td> 
 </tr>
 <tr>
   <th> </th>                      <td> </td>        <th>  LLR p-value:       </th> <td>3.419e-44</td>
@@ -1510,10 +1576,10 @@ ax[1].set_xlabel("gamma (escala logarítmica)");
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són:
     {'C': 540.1397163485832, 'gamma': 9.220965334716942e-06}
-
+    
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0974,
     el que representa que la millor puntuació és un 14.99% millor que la pitjor.
-
+    
 
 
 
@@ -1544,26 +1610,26 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8123
-
+    
     ------- Matriu de confusió -------
     [[196  21]
-     [ 46  94]]
-
+     [ 46  94]] 
+    
     ------- Classification report -------
                   precision    recall  f1-score   support
-
+    
              0.0       0.81      0.90      0.85       217
              1.0       0.82      0.67      0.74       140
-
+    
        micro avg       0.81      0.81      0.81       357
        macro avg       0.81      0.79      0.80       357
     weighted avg       0.81      0.81      0.81       357
-
+    
 
 
 ##### KNN
 
-El següent mètode que farem servir és el [k veins més proxims](https://es.wikipedia.org/wiki/K_vecinos_más_próximos) de la llibreria sklearn, per predir la variable survive. En la implementació, es farà una cerca de la millor combinació dels hiperparàmetres *n_neighbors* i *weights* mitjançant l'elecció de entre totes les combinacions entre 1 i 10, per *n_neighbors*, i entre 'uniform' i 'distance' , per *weights*, el càlcul de la puntuació es realitzarà mitjançant un 4-fold Cross-Validation.
+El següent mètode que farem servir és el [k veins més proxims](https://es.wikipedia.org/wiki/K_vecinos_más_próximos) de la llibreria sklearn, per predir la variable survive. En la implementació, es farà una cerca de la millor combinació dels hiperparàmetres *n_neighbors* i *weights* mitjançant l'elecció d'entre totes les combinacions entre 1 i 10, per *n_neighbors*, i entre 'uniform' i 'distance' , per *weights*, el càlcul de la puntuació es realitzarà mitjançant un 4-fold Cross-Validation.
 
 
 ```python
@@ -1608,8 +1674,8 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 ```
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són: {'n_neighbors': 5, 'weights': 'uniform'}
-
-
+    
+    
     La taula de puntuació en funció del valor k (columnes) i tipologia de pesos elegits (files) és:
 
 
@@ -1619,8 +1685,20 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -1670,7 +1748,7 @@ ax.set_title("Puntuació segons el nombre de veins i tipus de pesos considerats"
 
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0337,
     el que representa que la millor puntuació és un 5.07% millor que la pitjor.
-
+    
 
 
 
@@ -1701,26 +1779,26 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.7395
-
+    
     ------- Matriu de confusió -------
     [[186  31]
-     [ 62  78]]
-
+     [ 62  78]] 
+    
     ------- Classification report -------
                   precision    recall  f1-score   support
-
+    
              0.0       0.75      0.86      0.80       217
              1.0       0.72      0.56      0.63       140
-
+    
        micro avg       0.74      0.74      0.74       357
        macro avg       0.73      0.71      0.71       357
     weighted avg       0.74      0.74      0.73       357
-
+    
 
 
 ##### XGBoost
 
-El següent mètode s'exposa és el [XGBoost](https://en.wikipedia.org/wiki/XGBoost) anomenat també "Extreme Gradient Boosting", implementat en la llibreria del mateix nom i que, per a més informació, es pot consultar la [documentació de la llibreria XGBoost per Python](https://xgboost.readthedocs.io/en/latest/python/index.html), per predir la variable survive. En la implementació, es farà una cerca de la millor combinació dels hiperparàmetres *learning_rate*, *max_depth*, *colsample_bytree*, *n_estimator*, *subsample* i *gamma* mitjançant l'elecció entre 50 combinacions realitzades aleatòriament entre 0.03 i 0.3, per *learning_rate*, entre 2 i 6 per *max_depth*, entre 0.3 i 0.7, per *colsample_bytree*, entre 100 i 150 per *n_estimator*, entre 0.4 i 0.6 per *subsample* i entre 0 i 0.5 , per *gamma*, el càlcul de la puntuació es realitzarà mitjançant un 4-fold Cross-Validation.
+El darrer mètode que s'exposa és el [XGBoost](https://en.wikipedia.org/wiki/XGBoost) anomenat també "Extreme Gradient Boosting", implementat en la llibreria del mateix nom i que, per a més informació, es pot consultar la [documentació de la llibreria XGBoost per Python](https://xgboost.readthedocs.io/en/latest/python/index.html), per predir la variable survive. En la implementació, es farà una cerca de la millor combinació dels hiperparàmetres *learning_rate*, *max_depth*, *colsample_bytree*, *n_estimator*, *subsample* i *gamma* mitjançant l'elecció entre 50 combinacions realitzades aleatòriament entre 0.03 i 0.3, per *learning_rate*, entre 2 i 6 per *max_depth*, entre 0.3 i 0.7, per *colsample_bytree*, entre 100 i 150 per *n_estimator*, entre 0.4 i 0.6 per *subsample* i entre 0 i 0.5 , per *gamma*, el càlcul de la puntuació es realitzarà mitjançant un 4-fold Cross-Validation.
 
 
 ```python
@@ -1730,7 +1808,7 @@ from scipy.stats import randint
 # Crea el diccionari amb els paramatres a emprar segons es requereix
 param_distributions = {"colsample_bytree": uniform(0.7, 0.3),
     "gamma": uniform(0, 0.5),
-    "learning_rate": uniform(0.03, 0.3), # default 0.1
+    "learning_rate": uniform(0.03, 0.3), # default 0.1 
     "max_depth": randint(2, 6), # default 3
     "n_estimators": randint(100, 150), # default 100
     "subsample": uniform(0.6, 0.4)}
@@ -1791,10 +1869,10 @@ ax[5].set_xlabel("colsample_bytree");
 
     Els paràmetres amb els que s'ha obtingut el millor resultat són:
     {'colsample_bytree': 0.7958491252409777, 'gamma': 0.3747139534631242, 'learning_rate': 0.04718573255762214, 'max_depth': 3, 'n_estimators': 132, 'subsample': 0.6054013160093471}
-
+    
     La diferència entre el millor valor de puntuació i el pitjor és de 0.0393,
     el que representa que la millor puntuació és un 5.10% millor que la pitjor.
-
+    
 
 
 
@@ -1825,27 +1903,27 @@ print(classification_report(y_val, y_val_pred))
 ```
 
     La precisió mitjana en el conjunt de dades de validació és del 0.8263
-
+    
     ------- Matriu de confusió -------
     [[204  13]
-     [ 49  91]]
-
+     [ 49  91]] 
+    
     ------- Classification report -------
                   precision    recall  f1-score   support
-
+    
              0.0       0.81      0.94      0.87       217
              1.0       0.88      0.65      0.75       140
-
+    
        micro avg       0.83      0.83      0.83       357
        macro avg       0.84      0.80      0.81       357
     weighted avg       0.83      0.83      0.82       357
-
+    
 
 
 
 ```python
-# Mostra la precisió dels diferents models predictius
-result = pd.DataFrame([acc_logit, acc_svc, acc_knn, acc_xgboost],
+# Mostra la precisió dels diferents models predictius 
+result = pd.DataFrame([acc_logit, acc_svc, acc_knn, acc_xgboost], 
              index=['Logistic Regression', 'Suport Vector Classifier', 'KNN', 'XGBoost'],
              columns=['accuracy']
             )
@@ -1857,8 +1935,20 @@ display(result)
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -1891,11 +1981,11 @@ display(result)
 </div>
 
 
-Veiem doncs que després d'aplicar 4 mètodes diferents trobant els paràmetres òptims en cada cas, el model que millor resultats dona per la predicció de l'atribut survive és XGBoost.
+Veiem doncs que després d'aplicar 4 mètodes diferents trobant els paràmetres òptims en cada cas, el model que millor resultats dóna per la predicció de l'atribut *Survive* és XGBoost.
 
 # 6. Resolució del problema. Conclusions
 
-Recordant que el problema inicial era obtenir una predicció de supervivència per una sèrie de passatgers (conjunt de test) i analitzant les dades de l'apartat anterior de precisió pels diferents models predictius emprats, es decideix seleccionar el model XGBoost per fer la predicció. A continuació es realitza la predicció i també es crea el fitxer que es penjarà al concurs de Kaggle.
+Recordant que el problema inicial era obtenir una predicció de supervivència per una sèrie de passatgers (conjunt de test) i analitzant les dades de l'apartat anterior de precisió pels diferents models predictius emprats, es decideix seleccionar el model XGBoost per fer la predicció. A continuació es realitza la predicció i també es crea el fitxer que es penjarà a la competició de Kaggle.
 
 
 ```python
@@ -1907,8 +1997,20 @@ titanic_test_final.head()
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<table border="0" class="dataframe">
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -2029,22 +2131,22 @@ titanic_test_final['Survived_pred'] = y_test_pred
 result = titanic_test_final[['PassengerId', 'Survived_pred']].astype('int64')
 
 # S'exporta el dataframe al fitxer de submissio
-result.to_csv(path_or_buf=os.getcwd()+'/data/out/test_submission.csv',
+result.to_csv(path_or_buf=os.getcwd()+'/data/out/test_submission.csv', 
                     header=['PassengerId', 'Survived'], index=False)
 ```
 
 Aquest fitxer s'ha penjat a la [competició Titanic de kaggle](https://www.kaggle.com/c/titanic/leaderboard) i s'ha obtingut una puntuació de 0.77990, que serveix per posicionar-se en la posició 6510 del total de 16568 respostes pujades, a data 3 de gener de 2020.
 
-A mode de conclusió, indicar que en aquesta pràctica, primerament, s'han analitzat les dades disponibles referent als passatgers del Titanic, netejant-les i completant-les segons s'han considerat. Posteriorment, s'ha realitzat una anàlisi descriptiva de les dades, així com diferents proves estadístiques per tal d'analitzar el comportament diferenciat d'agrupacions de dades que s'han determinat després de l'observació de la distribució mostral de determinades variables, determinant-se diferències estadísticament significatives entre les diferents agrupacions estudiades. Finalment, s'ha dividit el conjunt de dades d'entrenament amb dos grups estratificats segons sexe, ja que era l'agrupació que mostrava significativament més diferències, un d'ell s'ha tractat pròpiament com el conjunt d'entrenament emprant-lo per entrenar els diferents models considerats i, l'altre, s'ha considerat com un conjunt de validació, per tal d'avaluar la precisió de cada model estudiat. En aquest sentit, s'han implementat quatre models predictius: regressió logística, vectors de suport, knn i XGBoost, obtenint la millor precisió amb el model XGBoost, que és el que s'ha emprat per obtenir la predicció en el conjunt de dades de test i que ha estat la que s'ha penjat en la competició de kaggle.
+A mode de conclusió, indicar que en aquesta pràctica, primerament, s'han analitzat les dades disponibles referent als passatgers del Titanic, netejant-les i completant-les segons s'ha considerat oportú. Posteriorment, s'ha realitzat una anàlisi descriptiva de les dades, així com diferents proves estadístiques per tal d'analitzar el comportament diferenciat d'agrupacions de dades que s'han determinat després de l'observació de la distribució mostral de determinades variables, determinant-se diferències estadísticament significatives entre les diferents agrupacions estudiades. Finalment, s'ha dividit el conjunt de dades d'entrenament amb dos grups estratificats segons sexe, ja que era l'agrupació que mostrava significativament més diferències, un d'ells s'ha tractat pròpiament com el conjunt d'entrenament emprant-lo per entrenar els diferents models considerats i, l'altre, s'ha considerat com un conjunt de validació, per tal d'avaluar la precisió de cada model estudiat. En aquest sentit, s'han implementat quatre models predictius: regressió logística, vectors de suport, knn i XGBoost, obtenint la millor precisió amb el model XGBoost, que és el que s'ha emprat per obtenir la predicció en el conjunt de dades de test i que ha estat la que s'ha penjat en la competició de kaggle.
 
-Cal indicar que la precisió obtinguda en el conjunt de test és similar a l'obtinguda en el conjunt de validació, però tot i això, és relativament baixa, menor al 80%, per tal d'intentar millorar aquesta puntuació i com a indicació per a futurs treballs, després d'analitzar altres solucions penjades en la web de la competició, seria molt interessant afegir un nou camp de "Titol" de passatger on, a partir de l'string del nom, es diferenciessin els passatgers oficials (Major, Capt, Col, etc), pertanyents a la reialesa (Sir, Countess, etc), segur que aquesta variable enriquiria el dataset i permetria millorar la puntuació.
+Cal indicar que la precisió obtinguda en el conjunt de test és similar a l'obtinguda en el conjunt de validació, però tot i això, és relativament baixa, menor al 80%, per tal d'intentar millorar aquesta puntuació i com a indicació per a futurs treballs, després d'analitzar altres solucions penjades en la web de la competició, seria molt interessant afegir un nou camp de "Titol" de passatger on, a partir de l'string del nom, es diferenciessin els passatgers oficials (Major, Capt, Col, etc) o pertanyents a la reialesa (Sir, Countess, etc), segur que aquesta variable enriquiria el dataset i permetria millorar la puntuació.
 
-Finalment, indicar que la valoració final de la pràctica ha estat molt positiva, ja que ens ha permés aplicar coneixements adquirits en altres assignatures i, com a resultat final, obtenir un resultat que ha estat "puntuat" en una competició.
+Finalment, indicar que la valoració final de la pràctica ha estat molt positiva, ja que ens ha permés aplicar coneixements adquirits en altres assignatures i, com a producte final, obtenir un resultat que ha estat "puntuat" en una competició.
 
 # 7. Taula de contribucions
 
 Contribucions | Signa
 -- | --
-Investigació prèvia |  JM.E.V. i A.L.M.
-Redacció de les respostes | JM.E.V. i A.L.M.
-Redacció de les respostes | JM.E.V. i A.L.M.
+Investigació prèvia |  JM.E.V. i A.L.M. 
+Redacció de les respostes | JM.E.V. i A.L.M. 
+Redacció de les respostes | JM.E.V. i A.L.M. 
